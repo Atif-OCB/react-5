@@ -1,0 +1,16 @@
+{
+  "name": "my-bookstore",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev:*\"",
+    "dev:client": "npm --workspace client run dev",
+    "dev:server": "npm --workspace server run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}
