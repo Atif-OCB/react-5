@@ -76,27 +76,27 @@ app.post('/login', (req, res) => {
 // ===============================
 
 // READ all books
-app.get('/books', /* authMiddleware, */(req, res) => {
+app.get('/books', authMiddleware, (req, res) => {
   const books = db.prepare('SELECT * FROM books').all();
   res.json(books);
 });
 
 // READ one book
-app.get('/books/:id', /* authMiddleware, */(req, res) => {
+app.get('/books/:id', authMiddleware, (req, res) => {
   const book = db.prepare('SELECT * FROM books WHERE id = ?').get(req.params.id);
   if (!book) return res.status(404).json({ message: 'Book not found' });
   res.json(book);
 });
 
 // CREATE new book
-app.post('/books', /* authMiddleware, */(req, res) => {
+app.post('/books', authMiddleware, (req, res) => {
   const { title, author, year } = req.body;
   const result = db.prepare('INSERT INTO books (title, author, year) VALUES (?, ?, ?)').run(title, author, year);
   res.json({ id: result.lastInsertRowid });
 });
 
 // UPDATE book
-app.put('/books/:id', /* authMiddleware, */(req, res) => {
+app.put('/books/:id', authMiddleware, (req, res) => {
   const { title, author, year } = req.body;
   const result = db.prepare('UPDATE books SET title = ?, author = ?, year = ? WHERE id = ?')
     .run(title, author, year, req.params.id);
@@ -106,7 +106,7 @@ app.put('/books/:id', /* authMiddleware, */(req, res) => {
 });
 
 // DELETE book
-app.delete('/books/:id', /* authMiddleware, */(req, res) => {
+app.delete('/books/:id', authMiddleware, (req, res) => {
   const result = db.prepare('DELETE FROM books WHERE id = ?').run(req.params.id);
   if (result.changes === 0) return res.status(404).json({ message: 'Book not found' });
   res.json({ message: 'Book deleted' });
